@@ -15,13 +15,14 @@ WORKDIR /tmp
 RUN git clone https://github.com/vlm/asn1c.git && \
     cd /tmp/asn1c && \
     test -f configure || autoreconf -iv && \
-    ./configure --prefix /srv/asn1c && \
+    ./configure && \
     make && \
 #    make check && \
     make install
 
-FROM ubuntu:20.04
+#Cleanup
 
-COPY --from=0 /srv/asn1c /usr/local/
+RUN rm -Rf /tmp/asn1c && \
+    rm -Rf /var/lib/apt/lists/*
 
 ENTRYPOINT ["/bin/bash"]
